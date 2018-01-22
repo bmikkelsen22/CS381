@@ -56,7 +56,9 @@ leftmost (Node _ l _) = leftmost l
 --   >>> rightmost t2
 --   9
 --
-rightmost = undefined
+rightmost :: Tree -> Int
+rightmost (Leaf i) = i
+rightmost (Node _ _ r) = rightmost r
 
 
 -- | Get the maximum integer from a binary tree.
@@ -76,7 +78,9 @@ rightmost = undefined
 --   >>> maxInt t2
 --   9
 --
-maxInt = undefined
+maxInt :: Tree -> Int
+maxInt (Leaf i) = i
+maxInt (Node i l r) = max i (max (maxInt l) (maxInt r))
 
 
 -- | Get the minimum integer from a binary tree.
@@ -96,7 +100,9 @@ maxInt = undefined
 --   >>> minInt t2
 --   1
 --
-minInt = undefined
+minInt :: Tree -> Int
+minInt (Leaf i) = i
+minInt (Node i l r) = min i (min (minInt l) (minInt r))
 
 
 -- | Get the sum of the integers in a binary tree.
@@ -113,7 +119,9 @@ minInt = undefined
 --   >>> sumInts (Node 10 t1 t2)
 --   100
 --
-sumInts = undefined
+sumInts :: Tree -> Int
+sumInts (Leaf i) = i
+sumInts (Node i l r) = (sumInts l) + i + (sumInts r)
 
 
 -- | The list of integers encountered by a pre-order traversal of the tree.
@@ -130,7 +138,9 @@ sumInts = undefined
 --   >>> preorder t2
 --   [6,2,1,4,3,5,8,7,9]
 --   
-preorder = undefined
+preorder :: Tree -> [Int]
+preorder (Leaf i) = [i]
+preorder (Node i l r) = [i] ++ (preorder l) ++ (preorder r)
 
 
 -- | The list of integers encountered by an in-order traversal of the tree.
@@ -147,8 +157,9 @@ preorder = undefined
 --   >>> inorder t2
 --   [1,2,3,4,5,6,7,8,9]
 --   
-inorder = undefined
-
+inorder :: Tree -> [Int]
+inorder (Leaf i) = [i]
+inorder (Node i l r) = (inorder l) ++ [i] ++ (inorder r)
 
 -- | Check whether a binary tree is a binary search tree.
 --
@@ -164,7 +175,9 @@ inorder = undefined
 --   >>> isBST t2
 --   True
 --   
-isBST = undefined
+isBST :: Tree -> Bool
+isBST (Leaf i) = True
+isBST (Node i l r) = (nodeVal l) < i && i < (nodeVal r) && (isBST l) && (isBST r)
 
 
 -- | Check whether a number is contained in a binary search tree.
@@ -182,4 +195,14 @@ isBST = undefined
 --   >>> inBST 10 t2
 --   False
 --   
-inBST = undefined
+inBST :: Int -> Tree -> Bool
+inBST n (Leaf i) = i == n
+inBST n (Node i l r) 
+        | i == n = True
+        | i > n = (inBST n l)
+        | i < n = (inBST n r)
+
+nodeVal :: Tree -> Int
+nodeVal (Leaf i) = i
+nodeVal (Node i _ _) = i
+        
