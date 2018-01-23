@@ -104,8 +104,8 @@ add (Succ n) m = add n (Succ m)
 --
 sub :: Nat -> Nat -> Nat
 sub n Zero = n
-sub (Succ n) (Succ m) = sub n (Succ m)
-
+sub (Succ n1) (Succ n2) = sub n1 n2
+sub Zero n = Zero
 
 -- | Is the left value greater than the right?
 --
@@ -119,6 +119,7 @@ sub (Succ n) (Succ m) = sub n (Succ m)
 --   False
 --
 gt :: Nat -> Nat -> Bool
+gt Zero Zero = False
 gt Zero (Succ n) = False
 gt (Succ n) Zero = True
 gt (Succ n) (Succ m) = gt n m
@@ -141,7 +142,7 @@ gt (Succ n) (Succ m) = gt n m
 mult :: Nat -> Nat -> Nat
 mult Zero _ = Zero
 mult _ Zero = Zero
-mult n (Succ s) = (Succ s)
+mult (Succ n) m = add (mult n m) m
 
 
 -- | Compute the sum of a list of natural numbers.
