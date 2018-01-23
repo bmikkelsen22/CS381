@@ -37,7 +37,9 @@ four = Succ three
 --   >>> pred three
 --   Succ (Succ Zero)
 --   
-pred = undefined
+pred :: Nat -> Nat
+pred Zero = Zero
+pred (Succ x) = x
 
 
 -- | True if the given value is zero.
@@ -48,7 +50,9 @@ pred = undefined
 --   >>> isZero two
 --   False
 --
-isZero = undefined
+isZero :: Nat -> Bool
+isZero Zero = True
+isZero _ = False
 
 
 -- | Convert a natural number to an integer.
@@ -59,7 +63,9 @@ isZero = undefined
 --   >>> toInt three
 --   3
 --
-toInt = undefined
+toInt :: Nat -> Int
+toInt Zero = 0
+toInt (Succ x) = (toInt x) + 1
 
 
 -- | Add two natural numbers.
@@ -76,7 +82,9 @@ toInt = undefined
 --   >>> add two three == add three two
 --   True
 --   
-add = undefined
+add :: Nat -> Nat -> Nat
+add Zero n = n
+add (Succ n) m = add n (Succ m)
 
 
 -- | Subtract the second natural number from the first. Return zero
@@ -94,7 +102,9 @@ add = undefined
 --   >>> sub one three
 --   Zero
 --
-sub = undefined
+sub :: Nat -> Nat -> Nat
+sub n Zero = n
+sub (Succ n) (Succ m) = sub n (Succ m)
 
 
 -- | Is the left value greater than the right?
@@ -108,7 +118,10 @@ sub = undefined
 --   >>> gt two two
 --   False
 --
-gt = undefined
+gt :: Nat -> Nat -> Bool
+gt Zero (Succ n) = False
+gt (Succ n) Zero = True
+gt (Succ n) (Succ m) = gt n m
 
 
 -- | Multiply two natural numbers.
@@ -125,7 +138,10 @@ gt = undefined
 --   >>> toInt (mult three three)
 --   9
 --
-mult = undefined
+mult :: Nat -> Nat -> Nat
+mult Zero _ = Zero
+mult _ Zero = Zero
+mult n (Succ s) = (Succ s)
 
 
 -- | Compute the sum of a list of natural numbers.
@@ -139,7 +155,9 @@ mult = undefined
 --   >>> toInt (sum [one,two,three])
 --   6
 --
-sum = undefined
+sum :: [Nat] -> Nat
+sum [] = Zero
+sum (h:t) = add h (sum t)
 
 
 -- | An infinite list of all of the *odd* natural numbers, in order.
@@ -150,4 +168,8 @@ sum = undefined
 --   >>> toInt (sum (take 100 odds))
 --   10000
 --
-odds = undefined
+odds :: [Nat]
+odds = oddsHelper one
+
+oddsHelper :: Nat -> [Nat]
+oddsHelper base = base : oddsHelper (add base two)
