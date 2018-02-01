@@ -44,7 +44,7 @@ nix = Define "nix" ["x", "y", "w", "h"] [Call "line" [V "x", V "y", Add (V "x") 
 -- Part 4 --
 steps :: Int -> Prog
 steps 0 = [Pen Down]
-steps n = steps (n - 1) ++ [Move (I (n - 1)) (I n), Move (I n) (I n)]
+steps n = steps (n - 1) ++ [Move (N (n - 1)) (N n), Move (N n) (N n)]
 
 -- Part 5 --
 macros :: Prog -> [Macro]
@@ -54,10 +54,10 @@ macros ((Define m _ _) : t) = m : (macros t)
 -- Part 6 --
 pretty :: Prog -> String
 pretty [] = ""
-pretty ((Pen m) : t) = "pen " + (prettyMode m) + ";\n" + (pretty t)
-pretty ((Move e1 e2) : t) = "move (" + (prettyExpr e1) + ", " + (prettyExpr e2) + ";\n" + (pretty t)
-pretty ((Define m vars prog) : t) = "define " + m + " (" + (intersperse ", " vars) + ") {\n" + (pretty prog) + "}\n" + (pretty t)
-pretty ((Call m exprs) : t) = "call " + m + (intersperse ", " (map prettyExpr exprs)) + ");\n" + (pretty t)
+pretty ((Pen m) : t) = "pen " ++ (prettyMode m) ++ ";\n" ++ (pretty t)
+pretty ((Move e1 e2) : t) = "move (" ++ (prettyExpr e1) ++ ", " ++ (prettyExpr e2) ++ ");\n" ++ (pretty t)
+pretty ((Define m vars prog) : t) = "define " ++ m ++ " (" ++ (intercalate ", " vars) ++ ") {\n" ++ (pretty prog) ++ "}\n" ++ (pretty t)
+pretty ((Call m exprs) : t) = "call " ++ m ++ " (" ++ (intercalate ", " (map prettyExpr exprs)) ++ ");\n" ++ (pretty t)
 
 prettyMode :: Mode -> String
 prettyMode Up = "up"
@@ -66,4 +66,4 @@ prettyMode Down = "down"
 prettyExpr :: Expr -> String
 prettyExpr (V var) = var
 prettyExpr (N num) = show num
-prettyExpr (Add e1 e2) = (prettyExpr e1) + "+" + (prettyExpr e2)
+prettyExpr (Add e1 e2) = (prettyExpr e1) ++ "+" ++ (prettyExpr e2)
