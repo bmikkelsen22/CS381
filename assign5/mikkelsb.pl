@@ -64,21 +64,25 @@ sibling(A,B) :- child(A,P), child(B,P), A \= B.
 
 % 5. Define two predicates `brother/2` and `sister/2`.
 brother(B1,B2) :- sibling(B1,B2), male(B1).
-sister(S1,S2) :- sibling(B1,B2), female(B1).
+sister(S1,S2) :- sibling(S1,S2), female(S1).
 
 % 6. Define a predicate `siblingInLaw/2`. A sibling-in-law is either married to
 %    a sibling or the sibling of a spouse.
-
+siblingInLaw(S1,S2) :- married(S1,X), sibling(X,S2); sibling(S1,Y), married(Y,S2).
 
 % 7. Define two predicates `aunt/2` and `uncle/2`. Your definitions of these
 %    predicates should include aunts and uncles by marriage.
 
+aunt(A,B) :- child(B,P), siblingInLaw(P, A), female(A).
+uncle(A,B) :- child(B,P), siblingInLaw(P, A), male(A).
+
 
 % 8. Define the predicate `cousin/2`.
-
+cousin(X,Y) :- child(X,P1), child(Y,P2), sibling(P1,P2).
 
 % 9. Define the predicate `ancestor/2`.
-
+ancestor(X,Y) :- parent(X,Y).
+ancestor(X,Y) :- parent(Z,Y), ancestor(X,Z).
 
 % Extra credit: Define the predicate `related/2`.
 
@@ -90,9 +94,21 @@ sister(S1,S2) :- sibling(B1,B2), female(B1).
 
 % 1. Define the predicate `cmd/3`, which describes the effect of executing a
 %    command on the stack.
+num(N) :- number(N).
+str(S) :- string(S).
+bool(B) :- B = t | B = f.
 
+cmd(N, S1, S2) :- num(N), append([N], S1, S2).
+cmd(S ,S1 , S2) :- str(S), append([S], S1, S2).
+cmd(add, [X,Y,Tail], S2) :- num(X), num(Y), addN(X,Y,R), append([R],Tail, S2).
+cmd(lte, [X,Y,Tail], S2) :- num(X), num(Y), (X =< Y -> append([t],Tail, S2) ; append([f],Tail, S2)).
+
+append([f],Tail, S2)).
+remove([Head|Tail],Tail, Head).
+addN(X,Y,R) :- R is +(X,Y).
 
 % 2. Define the predicate `prog/3`, which describes the effect of executing a
 %    program on the stack.
 
-
+prog(P, S1, S2) :- cmd(P, S1, S2).
+prog([P,Tail], S1, S2) :- cmd(P, S1, R),  prog(Tail, R, S2).
